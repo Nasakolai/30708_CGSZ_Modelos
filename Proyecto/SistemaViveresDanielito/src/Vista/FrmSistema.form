@@ -18,10 +18,16 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuA&#xf1;adirActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menuModificar">
+            <MenuItem class="javax.swing.JMenuItem" name="menuGestorP">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Gestionar Productos Existentes"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuGestorPActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -30,15 +36,16 @@
             <Property name="text" type="java.lang.String" value="Entradas/Salidas"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="menuEntrada">
+            <MenuItem class="javax.swing.JMenuItem" name="menuGestorI">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Ingreso Productos"/>
+                <Property name="text" type="java.lang.String" value="Gesti&#xf3;n Inventario"/>
               </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menuSalidas">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Salida Productos"/>
-              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuGestorIActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -47,15 +54,13 @@
             <Property name="text" type="java.lang.String" value="Generar Reporte"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="menuVentas">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Reporte de ventas"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuInventario">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Reporte inventario"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuInventarioActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

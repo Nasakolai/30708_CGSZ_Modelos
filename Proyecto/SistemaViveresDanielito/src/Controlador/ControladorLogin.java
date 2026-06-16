@@ -24,12 +24,14 @@ public class ControladorLogin implements ActionListener {
 
         // conectar botón
         objVista.btnIngresar.addActionListener(this);
+        objVista.txtUsuario.addActionListener(this);
+        objVista.txtContraseña.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == objVista.btnIngresar) {
+        if (e.getSource() == objVista.btnIngresar || e.getSource() == objVista.txtUsuario || e.getSource() == objVista.txtContraseña) {
 
             iniciarSesion();
         }
@@ -60,7 +62,7 @@ public class ControladorLogin implements ActionListener {
 
             // abrir interfaz principal
     FrmSistema frmSistema = new FrmSistema();
-
+    frmSistema.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
     frmSistema.setVisible(true);
 
     frmSistema.setLocationRelativeTo(null);

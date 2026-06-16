@@ -7,12 +7,24 @@ public class Producto {
   private String tipo;
   private double precioUnit;
   private String proveedor;
+  private int stock;
+  private String codigo;
 
     public Producto(String nombre, String tipo, double precioUnit, String proveedor) {
+        this(nombre, tipo, precioUnit, proveedor, 0, "");
+    }
+
+    public Producto(String nombre, String tipo, double precioUnit, String proveedor, int stock) {
+        this(nombre, tipo, precioUnit, proveedor, stock, "");
+    }
+
+    public Producto(String nombre, String tipo, double precioUnit, String proveedor, int stock, String codigo) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.precioUnit = precioUnit;
         this.proveedor = proveedor;
+        this.stock = stock;
+        this.codigo = codigo;
     }
 
     public Producto() {
@@ -50,9 +62,25 @@ public class Producto {
         this.proveedor = proveedor;
     }
 
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
     @Override
     public String toString() {
-        return "Producto{" + "nombre=" + nombre + ", tipo=" + tipo + ", precioUnit=" + precioUnit + ", proveedor=" + proveedor + '}';
+        return "Producto{" + "nombre=" + nombre + ", tipo=" + tipo + ", precioUnit=" + precioUnit + ", proveedor=" + proveedor + ", stock=" + stock + ", codigo=" + codigo + '}';
     }
    
 }

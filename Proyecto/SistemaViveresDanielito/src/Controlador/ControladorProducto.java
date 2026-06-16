@@ -42,26 +42,50 @@ public class ControladorProducto implements ActionListener{
         String tipo = objVista.CmbTipo.getSelectedItem().toString();
         String precioUnit = objVista.txtPrecio.getText().trim().replace(',', '.');
         String proveedor = objVista.txtProveedor.getText().trim();
+        String codigo = objVista.jTextFieldCodigoProducto.getText().trim();
+        int stock = 0;
 
-        if (nombre.isBlank() || precioUnit.isBlank()) {
-            JOptionPane.showMessageDialog(objVista, "Rellene todos los campos.");
+        if (nombre.isBlank() || precioUnit.isBlank() || codigo.isBlank()) {
+            JOptionPane.showMessageDialog(objVista, "Rellene todos los campos obligatorios (nombre, precio, código). ");
             return;
         }
 
         try {
             double precioKg = Double.parseDouble(precioUnit);
-            Producto producto = new Producto(nombre, tipo, precioKg, proveedor);
-            //esto se añadio para que se mande al hacer click en el boton
+            Producto producto = new Producto(nombre, tipo, precioKg, proveedor, stock, codigo);
             objDAO.añadirProducto(producto);
-            JOptionPane.showMessageDialog(objVista, "Se añadió "+producto.getNombre());
-            
+            JOptionPane.showMessageDialog(objVista, "Se añadió " + producto.getNombre());
+
+            int opcion = JOptionPane.showOptionDialog(
+                    objVista,
+                    "¿Desea seguir registrando o regresar al sistema principal?",
+                    "Continuar registro",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new Object[]{"Seguir registrando", "Volver al sistema"},
+                    "Seguir registrando"
+            );
+
+            if (opcion == JOptionPane.YES_OPTION) {
+                limpiarFormulario();
+            } else {
+                objVista.dispose();
+            }
 
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(objVista, "Formato inválido para precio por kg.");
+            JOptionPane.showMessageDialog(objVista, "Formato inválido para precio.");
         }
-   
     }
 
+    private void limpiarFormulario() {
+        objVista.txtNombre.setText("");
+        objVista.CmbTipo.setSelectedIndex(0);
+        objVista.txtPrecio.setText("");
+        objVista.txtProveedor.setText("");
+        objVista.jTextFieldCodigoProducto.setText("");
+        objVista.txtNombre.requestFocus();
+    }
 
     public void llenarTabla(JTable tabla) {
         ArrayList<Producto> lista = objDAO.listarProductos();
@@ -74,6 +98,7 @@ public class ControladorProducto implements ActionListener{
         modelo.addColumn("Tipo");
         modelo.addColumn("Precio/U");
         modelo.addColumn("Proveedor");
+        modelo.addColumn("Stock");
 
         for (Producto e : lista) {
             Object[] fila = {
@@ -81,6 +106,7 @@ public class ControladorProducto implements ActionListener{
                 e.getTipo(),
                 e.getPrecioUnit(),
                 e.getProveedor(),
+                e.getStock()
             };
             modelo.addRow(fila);
         }

@@ -11,6 +11,7 @@ public class Conexion {
     DBCollection coleccionProd;
     DBCollection coleccionProv;
     DBCollection coleccionUser;
+    DBCollection coleccionMov;
     
     public Conexion(){
         //ayuda a unirnos a la base de datos
@@ -19,6 +20,7 @@ public class Conexion {
         coleccionProd=baseDatos.getCollection("Producto");
         coleccionProv=baseDatos.getCollection("Proveedor");
         coleccionUser=baseDatos.getCollection("Usarios");
+        coleccionMov = baseDatos.getCollection("Movimientos");
         
     }
 }

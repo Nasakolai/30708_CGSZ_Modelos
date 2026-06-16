@@ -24,7 +24,9 @@ public class ProductoDAO {
         documento.put("nombre", e.getNombre());
         documento.put("tipo", e.getTipo());
         documento.put("precio unitario", e.getPrecioUnit());
-        documento.put("proveedor",e.getProveedor());
+        documento.put("proveedor", e.getProveedor());
+        documento.put("stock", e.getStock());
+        documento.put("codigo", e.getCodigo());
         coleccion.insert(documento);
         System.out.println("se mandó al mongo :D");
     }
@@ -40,21 +42,26 @@ public class ProductoDAO {
      public Producto buscarPorNombre(String nombre) {
         BasicDBObject query = new BasicDBObject();
         query.put("nombre", nombre);
-//        
-//
         DBObject obj = coleccion.findOne(query);
         System.out.println("Query producto: " + nombre);
-
-System.out.println("Resultado producto: " + obj);
+        System.out.println("Resultado producto: " + obj);
 
         if (obj != null) {
             Producto e = new Producto();
             e.setNombre((String) obj.get("nombre"));
+            e.setTipo((String) obj.get("tipo"));
             e.setPrecioUnit(((Number) obj.get("precio unitario")).doubleValue());
+            e.setProveedor((String) obj.get("proveedor"));
+            e.setCodigo((String) obj.get("codigo"));
+            Object stockObj = obj.get("stock");
+            if (stockObj instanceof Number) {
+                e.setStock(((Number) stockObj).intValue());
+            } else {
+                e.setStock(0);
+            }
             System.out.println("PRODUCTO DEBUG — producto encontrado:");
-System.out.println("PRODUCTO: Nombre: " + obj.get("nombre"));
-System.out.println("PRODUCTO: Precio unitario: " + obj.get("precio unitario"));
-
+            System.out.println("PRODUCTO: Nombre: " + obj.get("nombre"));
+            System.out.println("PRODUCTO: Precio unitario: " + obj.get("precio unitario"));
             return e;
         }
         return null;
@@ -69,8 +76,19 @@ System.out.println("PRODUCTO: Precio unitario: " + obj.get("precio unitario"));
         nuevosDatos.put("tipo", nueva.getTipo());
         nuevosDatos.put("precio unitario", nueva.getPrecioUnit());
         nuevosDatos.put("proveedor", nueva.getProveedor());
+        nuevosDatos.put("stock", nueva.getStock());
+        nuevosDatos.put("codigo", nueva.getCodigo());
         BasicDBObject actualizacion = new BasicDBObject("$set", nuevosDatos);
-        coleccion.update(filtro, actualizacion);
+        try {
+            System.out.println("ProductoDAO.modificarProducto -> filtro: " + filtro);
+            System.out.println("ProductoDAO.modificarProducto -> nuevosDatos: " + nuevosDatos);
+            com.mongodb.WriteResult res = coleccion.update(filtro, actualizacion);
+            System.out.println("ProductoDAO.modificarProducto -> resultado: " + res);
+        } catch (Exception ex) {
+            System.out.println("Error al actualizar producto en Mongo: " + ex.getMessage());
+            ex.printStackTrace();
+            throw ex;
+        }
     }
 
     // Listar todo producto de la base MongoDB
@@ -82,7 +100,15 @@ System.out.println("PRODUCTO: Precio unitario: " + obj.get("precio unitario"));
             Producto e = new Producto();
             e.setNombre((String) doc.get("nombre"));
             e.setTipo((String) doc.get("tipo"));
-            e.setPrecioUnit((double) doc.get("precio unitario"));
+            e.setPrecioUnit(((Number) doc.get("precio unitario")).doubleValue());
+            e.setProveedor((String) doc.get("proveedor"));
+            e.setCodigo((String) doc.get("codigo"));
+            Object stockObj = doc.get("stock");
+            if (stockObj instanceof Number) {
+                e.setStock(((Number) stockObj).intValue());
+            } else {
+                e.setStock(0);
+            }
             especies.add(e);
         }
         return especies;
@@ -111,7 +137,15 @@ public ArrayList<Producto> buscarEspecie(String prefijo) {
         Producto e = new Producto();
         e.setNombre((String) doc.get("nombre"));
         e.setTipo((String) doc.get("tipo"));
-        e.setPrecioUnit((double) doc.get("precio unitario"));
+        e.setPrecioUnit(((Number) doc.get("precio unitario")).doubleValue());
+        e.setProveedor((String) doc.get("proveedor"));
+        e.setCodigo((String) doc.get("codigo"));
+        Object stockObj = doc.get("stock");
+        if (stockObj instanceof Number) {
+            e.setStock(((Number) stockObj).intValue());
+        } else {
+            e.setStock(0);
+        }
         coincidencias.add(e);
     }
 
