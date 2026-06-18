@@ -31,6 +31,20 @@ public class FrmGestionMovimientos extends javax.swing.JFrame {
     public FrmGestionMovimientos() {
         initComponents();
 
+        // mascara dd/mm/aaaa para los filtros de fecha, igual a como se
+        // hace en la pantalla de Generar Reportes
+        try {
+            javax.swing.text.MaskFormatter formatoFechaDesde = new javax.swing.text.MaskFormatter("##/##/####");
+            formatoFechaDesde.setPlaceholderCharacter('_');
+            txtFiltroFechaDesde.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(formatoFechaDesde));
+
+            javax.swing.text.MaskFormatter formatoFechaHasta = new javax.swing.text.MaskFormatter("##/##/####");
+            formatoFechaHasta.setPlaceholderCharacter('_');
+            txtFiltroFechaHasta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(formatoFechaHasta));
+        } catch (java.text.ParseException ex) {
+            System.err.println("No se pudo configurar el formato de fecha de los filtros: " + ex.getMessage());
+        }
+
         SetImageLabel(agregar, "/imagenes/agregar.png");
         SetImageLabel(agregarblanco, "/imagenes/agregarblanco.png");
         agregarblanco.setVisible(false);
@@ -94,6 +108,15 @@ public class FrmGestionMovimientos extends javax.swing.JFrame {
         btnSalir = new javax.swing.JPanel();
         txtSalir = new javax.swing.JLabel();
         btnEliminar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        jLabelFiltroProducto = new javax.swing.JLabel();
+        cmbFiltroProducto = new javax.swing.JComboBox<>();
+        jLabelFiltroDesde = new javax.swing.JLabel();
+        txtFiltroFechaDesde = new javax.swing.JFormattedTextField();
+        jLabelFiltroHasta = new javax.swing.JLabel();
+        txtFiltroFechaHasta = new javax.swing.JFormattedTextField();
+        btnFiltrar = new javax.swing.JButton();
+        btnLimpiarFiltro = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaMovimientos = new javax.swing.JTable();
         logo = new javax.swing.JLabel();
@@ -111,11 +134,57 @@ public class FrmGestionMovimientos extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(1009, 670));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setFont(new java.awt.Font("Roboto", 0, 24)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(204, 223, 255));
         jLabel6.setText("Movimientos de Inventario");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 180, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 58, -1, -1));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(656, 255, 344, 0));
+
+        // ---- filtros: antes esta pantalla listaba todos los movimientos
+        // de una sola vez sin ninguna forma de acotar la busqueda; con
+        // cientos de movimientos eso se vuelve una lista eterna. se agrega
+        // aqui un filtro por producto y por rango de fechas, igual al que
+        // ya existia en la pantalla de Generar Reportes. ----
+        jLabelFiltroProducto.setFont(new java.awt.Font("Roboto", 0, 16)); // NOI18N
+        jLabelFiltroProducto.setForeground(new java.awt.Color(204, 223, 255));
+        jLabelFiltroProducto.setText("Producto:");
+        jPanel1.add(jLabelFiltroProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 92, 80, 25));
+
+        cmbFiltroProducto.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        cmbFiltroProducto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos los productos" }));
+        jPanel1.add(cmbFiltroProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 89, 280, 30));
+
+        jLabelFiltroDesde.setFont(new java.awt.Font("Roboto", 0, 16)); // NOI18N
+        jLabelFiltroDesde.setForeground(new java.awt.Color(204, 223, 255));
+        jLabelFiltroDesde.setText("Desde:");
+        jPanel1.add(jLabelFiltroDesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(685, 92, 60, 25));
+
+        txtFiltroFechaDesde.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jPanel1.add(txtFiltroFechaDesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 89, 100, 30));
+
+        jLabelFiltroHasta.setFont(new java.awt.Font("Roboto", 0, 16)); // NOI18N
+        jLabelFiltroHasta.setForeground(new java.awt.Color(204, 223, 255));
+        jLabelFiltroHasta.setText("Hasta:");
+        jPanel1.add(jLabelFiltroHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 92, 55, 25));
+
+        txtFiltroFechaHasta.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jPanel1.add(txtFiltroFechaHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 89, 80, 30));
+
+        btnFiltrar.setBackground(new java.awt.Color(255, 255, 255));
+        btnFiltrar.setFont(new java.awt.Font("Roboto", 0, 16)); // NOI18N
+        btnFiltrar.setForeground(new java.awt.Color(0, 0, 0));
+        btnFiltrar.setText("Filtrar");
+        btnFiltrar.setBorder(null);
+        btnFiltrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 130, 100, 32));
+
+        btnLimpiarFiltro.setBackground(new java.awt.Color(255, 255, 255));
+        btnLimpiarFiltro.setFont(new java.awt.Font("Roboto", 0, 16)); // NOI18N
+        btnLimpiarFiltro.setForeground(new java.awt.Color(0, 0, 0));
+        btnLimpiarFiltro.setText("Limpiar Filtro");
+        btnLimpiarFiltro.setBorder(null);
+        btnLimpiarFiltro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(btnLimpiarFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, 150, 32));
 
         menu.setBackground(new java.awt.Color(153, 190, 255));
         menu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(10, 25, 51), 3));
@@ -319,6 +388,27 @@ public class FrmGestionMovimientos extends javax.swing.JFrame {
 
         jPanel1.add(header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1010, 50));
 
+        btnEditar.setBackground(new java.awt.Color(255, 255, 255));
+        btnEditar.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
+        btnEditar.setForeground(new java.awt.Color(0, 0, 0));
+        btnEditar.setText("Editar Movimiento");
+        btnEditar.setBorder(null);
+        btnEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEditar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEditarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEditarMouseExited(evt);
+            }
+        });
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 610, 220, 40));
+
         btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
         btnEliminar.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
@@ -361,7 +451,7 @@ public class FrmGestionMovimientos extends javax.swing.JFrame {
         tablaMovimientos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tablaMovimientos);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 220, 710, 380));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 175, 710, 425));
 
         logo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         logo.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -381,6 +471,20 @@ public class FrmGestionMovimientos extends javax.swing.JFrame {
         // (se conecta con un addActionListener aparte desde el controlador,
         // siguiendo el mismo patron que usan las demas pantallas de la app)
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
+        // igual que btnEliminar: la logica real la pone el controlador
+    }
+
+    private void btnEditarMouseEntered(java.awt.event.MouseEvent evt) {
+        btnEditar.setBackground(new Color(82,126,204));
+        btnEditar.setForeground(Color.white);
+    }
+
+    private void btnEditarMouseExited(java.awt.event.MouseEvent evt) {
+        btnEditar.setBackground(Color.white);
+        btnEditar.setForeground(Color.black);
+    }
 
     private void btnEliminarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseEntered
         btnEliminar.setBackground(new Color(82,126,204));
@@ -570,8 +674,17 @@ public class FrmGestionMovimientos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel agregar;
     private javax.swing.JLabel agregarblanco;
+    public javax.swing.JButton btnEditar;
     public javax.swing.JButton btnEliminar;
     private javax.swing.JPanel btnSalir;
+    public javax.swing.JButton btnFiltrar;
+    public javax.swing.JButton btnLimpiarFiltro;
+    public javax.swing.JComboBox<String> cmbFiltroProducto;
+    public javax.swing.JFormattedTextField txtFiltroFechaDesde;
+    public javax.swing.JFormattedTextField txtFiltroFechaHasta;
+    private javax.swing.JLabel jLabelFiltroProducto;
+    private javax.swing.JLabel jLabelFiltroDesde;
+    private javax.swing.JLabel jLabelFiltroHasta;
     private javax.swing.JLabel entrada;
     private javax.swing.JLabel entradablanco;
     private javax.swing.JLabel gestion;

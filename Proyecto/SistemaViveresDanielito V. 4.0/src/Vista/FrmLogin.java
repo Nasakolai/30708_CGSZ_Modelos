@@ -68,12 +68,10 @@ public class FrmLogin extends javax.swing.JFrame {
         jLabel3.setText("Contraseña");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 410, -1, 40));
 
-        txtContraseña.setBackground(new java.awt.Color(255, 255, 255));
         txtContraseña.setFont(new java.awt.Font("Roboto Condensed Black", 0, 14)); // NOI18N
-        txtContraseña.setText("*********");
         txtContraseña.setToolTipText("");
         txtContraseña.setBorder(null);
-        txtContraseña.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtContraseña.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         txtContraseña.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtContraseñaFocusGained(evt);
@@ -114,7 +112,7 @@ public class FrmLogin extends javax.swing.JFrame {
         txtSalir.setForeground(new java.awt.Color(255, 255, 255));
         txtSalir.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtSalir.setText("X");
-        txtSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txtSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         txtSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 txtSalirMouseClicked(evt);
@@ -160,13 +158,12 @@ public class FrmLogin extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(204, 223, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnIngresar.setBackground(new java.awt.Color(255, 255, 255));
         btnIngresar.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         btnIngresar.setForeground(new java.awt.Color(10, 25, 51));
         btnIngresar.setText("Ingresar");
         btnIngresar.setBorder(null);
         btnIngresar.setBorderPainted(false);
-        btnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnIngresar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnIngresarMouseEntered(evt);
@@ -184,7 +181,6 @@ public class FrmLogin extends javax.swing.JFrame {
         jPanel2.add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 300, 180));
         jPanel2.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 410, 10));
 
-        txtUsuario.setBackground(new java.awt.Color(255, 255, 255));
         txtUsuario.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         txtUsuario.setForeground(new java.awt.Color(153, 153, 153));
         txtUsuario.setText("  Ingrese su nombre de usuario");
@@ -250,7 +246,7 @@ public class FrmLogin extends javax.swing.JFrame {
     // muestra cuando el campo esta vacio. los dejamos como constantes para no
     // tener el mismo texto repetido y mal escrito en cuatro lugares distintos.
     private static final String PLACEHOLDER_USUARIO = "  Ingrese su nombre de usuario";
-    private static final String PLACEHOLDER_CONTRASEÑA = "*********";
+    private static final String PLACEHOLDER_CONTRASEÑA = "";
 
     private void txtUsuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsuarioFocusGained
         if (txtUsuario.getText().equals(PLACEHOLDER_USUARIO)) {

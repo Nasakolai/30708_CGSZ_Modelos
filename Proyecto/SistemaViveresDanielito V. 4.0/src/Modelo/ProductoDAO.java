@@ -139,6 +139,34 @@ public class ProductoDAO {
     }
 
     /**
+     * busca un producto por su codigo unico (por ejemplo "LT004"). se usa
+     * sobre todo al editar/eliminar un movimiento, donde lo unico que se
+     * tiene guardado de forma confiable es el codigo del producto (el
+     * nombre podria haber cambiado despues de registrar el movimiento).
+     */
+    public Producto buscarPorCodigo(String codigo) {
+        if (codigo == null || codigo.trim().isEmpty()) {
+            return null;
+        }
+        BasicDBObject query = new BasicDBObject("codigo", codigo.trim());
+        DBObject obj = coleccion.findOne(query);
+
+        if (obj == null) {
+            return null;
+        }
+
+        Producto e = new Producto();
+        e.setNombre((String) obj.get("nombre"));
+        e.setTipo((String) obj.get("tipo"));
+        e.setPrecioUnit(numeroSeguro(obj.get("precio unitario")));
+        e.setProveedor((String) obj.get("proveedor"));
+        e.setCodigo((String) obj.get("codigo"));
+        Object stockObj = obj.get("stock");
+        e.setStock(stockObj instanceof Number ? ((Number) stockObj).intValue() : 0);
+        return e;
+    }
+
+    /**
      * cambia los datos de un producto buscandolo por su nombre original.
      * @param nombre nombre con el que esta guardado actualmente en mongo
      * @param nueva los datos nuevos que va a tener

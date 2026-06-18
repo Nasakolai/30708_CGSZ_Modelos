@@ -150,7 +150,7 @@ public class ControladorGestionInventarioo {
 
     private void limpiarFormulario() {
         vista.jComboBoxProductoMongo.setSelectedIndex(0);
-        vista.jSpinnerCantidad.setValue(0);
+        vista.jSpinnerCantidad.setValue(1);
         vista.jTextArea1.setText("");
         vista.jRadioButtonEntrada.setSelected(true);
         vista.jLabelStockActual.setText("0");

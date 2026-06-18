@@ -61,8 +61,12 @@ public class ControladorGenerarReporte {
     }
 
     private void configurarListeners() {
-        // Specific filtered report
-        vista.getButtonGenerarEspecifico().addActionListener((ActionEvent e) -> generarReporteFiltrado());
+        // antes este boton generaba un reporte de movimientos filtrado;
+        // ahora genera el reporte de inventario actual (stock), usando los
+        // mismos combos de producto/proveedor (el de estado se ignora
+        // porque el stock no tiene "entradas" ni "salidas", es una foto del
+        // inventario en este momento)
+        vista.getButtonGenerarEspecifico().addActionListener((ActionEvent e) -> generarReporteStock());
         // General report (no filters)
         vista.getButtonGenerarGeneral().addActionListener((ActionEvent e) -> generarReporteGeneral());
         
@@ -96,95 +100,119 @@ public class ControladorGenerarReporte {
         escribirReporteYNotificar(lista, "reporte_movimientos_general", "General (todos los movimientos)");
     }
 
-    private void generarReporteFiltrado() {
+    /**
+     * genera el reporte de "inventario actual": lo que hay en bodega hoy
+     * por cada producto, junto con su valor total (precio unitario x
+     * stock). a diferencia del reporte de movimientos, aqui no se filtra
+     * por fecha ni por tipo de movimiento (estado), porque el stock es una
+     * sola foto del momento, no un historial.
+     */
+    private void generarReporteStock() {
         String producto = (String) vista.getProductoCombo().getSelectedItem();
         String categoria = (String) vista.getCategoriaCombo().getSelectedItem();
-        String estado = (String) vista.getEstadoCombo().getSelectedItem();
-        String desdeText = vista.getFechaDesdeField().getText().trim();
-        String hastaText = vista.getFechaHastaField().getText().trim();
 
-        BasicDBObject filtro = new BasicDBObject();
-        if (producto != null && !producto.equals("Todos los productos")) {
-            int start = producto.lastIndexOf("(");
-            int end = producto.lastIndexOf(")");
-            if (start != -1 && end != -1) {
-                String codigo = producto.substring(start + 1, end);
-                filtro.put("codigoProducto", codigo);
-            } else {
-                filtro.put("nombreProducto", producto);
-            }
-        }
-
-        ArrayList<Movimiento> lista = movDao.listarMovimientos(filtro);
-
-        // filtrar por fechas. si el campo esta vacio o el texto no tiene un
-        // formato de fecha valido, simplemente no se filtra por esa fecha
-        // (antes habia una condicion rara con dobles negaciones que hacia
-        // exactamente lo mismo pero de una forma muy dificil de entender)
-        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
-        Date desde = parsearFechaSegura(fmt, desdeText);
-        Date hasta = parsearFechaSegura(fmt, hastaText);
-
-        java.util.Map<String, String> codigoAProveedor = new java.util.HashMap<>();
-        for (Producto p : prodDao.listarProductos()) {
-            if (p.getCodigo() != null && p.getProveedor() != null) {
-                codigoAProveedor.put(p.getCodigo(), p.getProveedor());
-            }
-        }
-
-        java.util.List<Movimiento> filtrada = new java.util.ArrayList<>();
-        for (Movimiento m : lista) {
+        ArrayList<Producto> productos = prodDao.listarProductos();
+        ArrayList<Producto> filtrados = new ArrayList<>();
+        for (Producto p : productos) {
             boolean ok = true;
-            // proveedor
+            if (producto != null && !producto.equals("Todos los productos")) {
+                String etiqueta = p.getNombre() + " (" + p.getCodigo() + ")";
+                if (!etiqueta.equals(producto)) ok = false;
+            }
             if (ok && categoria != null && !categoria.equals("Todos los proveedores")) {
-                String prov = codigoAProveedor.getOrDefault(m.getCodigoProducto(), "");
+                String prov = p.getProveedor() == null ? "" : p.getProveedor();
                 if (!categoria.equals(prov)) ok = false;
             }
-            
-            // fecha
-            try {
-                Date f = fmt.parse(m.getFecha());
-                if (desde != null && f.before(desde)) ok = false;
-                if (hasta != null && f.after(hasta)) ok = false;
-            } catch (Exception ex) {
-                // ignore parse
-            }
-            // estado (ahora es tipo de movimiento ENTRADA / SALIDA)
-            if (ok && estado != null && !estado.equals("Todos")) {
-                String tipoMovimiento = m.getTipo() != null ? m.getTipo().toUpperCase() : "";
-                if (estado.equals("ENTRADA") && !tipoMovimiento.equals("ENTRADA")) ok = false;
-                if (estado.equals("SALIDA") && !tipoMovimiento.equals("SALIDA")) ok = false;
-            }
-            if (ok) filtrada.add(m);
+            if (ok) filtrados.add(p);
         }
 
-        // armamos una descripcion legible de los filtros que se usaron, para
-        // que quede anotada en el encabezado del reporte (asi quien lo lea
-        // despues sabe exactamente que se filtro, sin tener que adivinar)
-        StringBuilder descripcion = new StringBuilder("Filtrado");
+        StringBuilder descripcion = new StringBuilder("Inventario actual");
         descripcion.append(" | Producto: ").append(producto == null ? "Todos los productos" : producto);
         descripcion.append(" | Proveedor: ").append(categoria == null ? "Todos los proveedores" : categoria);
-        descripcion.append(" | Movimiento: ").append(estado == null ? "Todos" : estado);
-        descripcion.append(" | Desde: ").append(desde == null ? "(sin filtro)" : desdeText);
-        descripcion.append(" | Hasta: ").append(hasta == null ? "(sin filtro)" : hastaText);
 
-        escribirReporteYNotificar(new ArrayList<>(filtrada), "reporte_movimientos_filtrado", descripcion.toString());
+        escribirReporteStockYNotificar(filtrados, descripcion.toString());
     }
 
-    /**
-     * intenta convertir un texto a fecha con el formato dado. si el texto
-     * viene vacio, null, o no tiene un formato de fecha valido (por ejemplo
-     * si el usuario dejo el "dd/MM/yyyy" de ejemplo sin cambiar) regresa
-     * null en vez de tronar, total que estas fechas son filtros opcionales.
-     */
-    private Date parsearFechaSegura(SimpleDateFormat formato, String texto) {
-        if (texto == null || texto.trim().isEmpty()) {
-            return null;
-        }
+    private void escribirReporteStockYNotificar(ArrayList<Producto> productos, String descripcionTipo) {
         try {
-            return formato.parse(texto.trim());
-        } catch (ParseException ex) {
-            return null;
+            File dir = new File("reports");
+            if (!dir.exists()) dir.mkdirs();
+            String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            File out = new File(dir, "reporte_stock_" + time + ".txt");
+
+            final int ANCHO = 110;
+            String lineaDoble = "=".repeat(ANCHO);
+            String lineaSimple = "-".repeat(ANCHO);
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(out, java.nio.charset.StandardCharsets.UTF_8))) {
+
+                bw.write(lineaDoble);
+                bw.newLine();
+                bw.write(centrar(NOMBRE_EMPRESA, ANCHO));
+                bw.newLine();
+                bw.write(centrar("Reporte de Inventario Actual (Stock)", ANCHO));
+                bw.newLine();
+                bw.write(lineaDoble);
+                bw.newLine();
+                bw.write(String.format("Tipo de reporte    : %s", descripcionTipo));
+                bw.newLine();
+                bw.write(String.format("Generado por       : %s", RESPONSABLE_REPORTE));
+                bw.newLine();
+                bw.write(String.format("Fecha de emisión   : %s", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
+                bw.newLine();
+                bw.write(String.format("Total de productos : %d", productos.size()));
+                bw.newLine();
+                bw.write(lineaDoble);
+                bw.newLine();
+
+                String formato = "%-12s %-25s %-15s %-15s %10s %12s %15s";
+                String header = String.format(formato, "Codigo", "Producto", "Tipo", "Proveedor", "Stock", "Precio/U", "Valor Total");
+                bw.write(header);
+                bw.newLine();
+                bw.write(lineaSimple);
+                bw.newLine();
+
+                int totalUnidades = 0;
+                double valorTotalInventario = 0.0;
+
+                for (Producto p : productos) {
+                    double valor = p.getPrecioUnit() * p.getStock();
+                    totalUnidades += p.getStock();
+                    valorTotalInventario += valor;
+                    String prov = (p.getProveedor() == null || p.getProveedor().isEmpty()) ? "N/A" : p.getProveedor();
+                    String linea = String.format(formato,
+                            p.getCodigo(), p.getNombre(), p.getTipo(), prov,
+                            String.valueOf(p.getStock()),
+                            String.format("$%.2f", p.getPrecioUnit()),
+                            String.format("$%.2f", valor));
+                    bw.write(linea);
+                    bw.newLine();
+                }
+                bw.write(lineaSimple);
+                bw.newLine();
+                bw.newLine();
+
+                bw.write("RESUMEN");
+                bw.newLine();
+                bw.write("-------");
+                bw.newLine();
+                bw.write(String.format("Productos listados         : %d", productos.size()));
+                bw.newLine();
+                bw.write(String.format("Unidades totales en stock  : %d", totalUnidades));
+                bw.newLine();
+                bw.write(String.format("Valor total del inventario : $%.2f", valorTotalInventario));
+                bw.newLine();
+                bw.newLine();
+                bw.write(lineaDoble);
+                bw.newLine();
+                bw.write(centrar("Fin del reporte — Sistema Víveres Danielito", ANCHO));
+                bw.newLine();
+                bw.write(lineaDoble);
+                bw.newLine();
+            }
+            JOptionPane.showMessageDialog(vista, "Reporte guardado: " + out.getAbsolutePath() + "\nProductos: " + productos.size());
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(vista, "Error al guardar reporte: " + ex.getMessage());
         }
     }
 

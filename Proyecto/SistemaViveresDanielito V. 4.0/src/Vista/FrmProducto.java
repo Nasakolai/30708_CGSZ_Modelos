@@ -46,6 +46,11 @@ public class FrmProducto extends javax.swing.JFrame {
         salirblanco.setVisible(false);     
         jTextFieldCodigoProducto.setVisible(false);
         jLabel6.setVisible(false);
+
+        // el precio no debe aceptar letras ni ningun caracter que no sea
+        // un numero (con punto decimal), asi ni siquiera se puede teclear
+        // algo invalido en vez de avisar recien al momento de registrar.
+        FiltroNumerico.soloDecimales(txtPrecio);
     }
     
     private void paralasventanas() {
@@ -101,7 +106,7 @@ public class FrmProducto extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         CmbTipo = new javax.swing.JComboBox<>();
-        txtProveedor = new javax.swing.JTextField();
+        txtProveedor = new javax.swing.JComboBox<>();
         txtPrecio = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
         jTextFieldCodigoProducto = new javax.swing.JTextField();
@@ -324,7 +329,9 @@ public class FrmProducto extends javax.swing.JFrame {
         txtProveedor.setBackground(new java.awt.Color(255, 255, 255));
         txtProveedor.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         txtProveedor.setForeground(new java.awt.Color(0, 0, 0));
+        txtProveedor.setEditable(true);
         txtProveedor.setBorder(null);
+        txtProveedor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         txtProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtProveedorActionPerformed(evt);
@@ -686,7 +693,7 @@ this.dispose();
     private javax.swing.JLabel txtGestion;
     public javax.swing.JTextField txtNombre;
     public javax.swing.JTextField txtPrecio;
-    public javax.swing.JTextField txtProveedor;
+    public javax.swing.JComboBox<String> txtProveedor;
     private javax.swing.JLabel txtReporte;
     private javax.swing.JLabel txtSalir;
     private javax.swing.JLabel txtSalir1;

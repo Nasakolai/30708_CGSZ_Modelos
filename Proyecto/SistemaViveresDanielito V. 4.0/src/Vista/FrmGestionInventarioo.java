@@ -28,6 +28,16 @@ public class FrmGestionInventarioo extends javax.swing.JFrame {
         grupoMovimiento.add(jRadioButtonEntrada);
         grupoMovimiento.add(jRadioButtonSalida);
         jRadioButtonEntrada.setSelected(true);
+
+        // la cantidad de un movimiento siempre tiene que ser un numero
+        // entero positivo: con este modelo el spinner ya no deja bajar de
+        // 1 con las flechitas, y con el filtro de abajo tampoco se puede
+        // escribir una letra a mano en el cuadro de texto del spinner.
+        jSpinnerCantidad.setModel(new javax.swing.SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        javax.swing.JComponent editorSpinner = jSpinnerCantidad.getEditor();
+        if (editorSpinner instanceof javax.swing.JSpinner.DefaultEditor) {
+            FiltroNumerico.soloEnteros(((javax.swing.JSpinner.DefaultEditor) editorSpinner).getTextField());
+        }
         try {
             javax.swing.text.MaskFormatter formatoFecha = new javax.swing.text.MaskFormatter("##/##/####");
             formatoFecha.setPlaceholderCharacter('_');
@@ -302,14 +312,14 @@ public class FrmGestionInventarioo extends javax.swing.JFrame {
         jRadioButtonEntrada.setForeground(new java.awt.Color(0, 0, 0));
         jRadioButtonEntrada.setText("Entrada");
         jRadioButtonEntrada.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel2.add(jRadioButtonEntrada, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 100, -1));
+        jPanel2.add(jRadioButtonEntrada, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 140, -1));
 
         jRadioButtonSalida.setBackground(new java.awt.Color(153, 190, 255));
         jRadioButtonSalida.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         jRadioButtonSalida.setForeground(new java.awt.Color(0, 0, 0));
         jRadioButtonSalida.setText("Salida");
         jRadioButtonSalida.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel2.add(jRadioButtonSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, 98, -1));
+        jPanel2.add(jRadioButtonSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, 120, -1));
 
         jLabel9.setBackground(new java.awt.Color(0, 0, 0));
         jLabel9.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
@@ -412,7 +422,7 @@ public class FrmGestionInventarioo extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Codigo del Producto");
+        jLabel7.setText("Código del Producto");
         jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 30, 210, -1));
 
         jFormattedTextFieldFecha.setBackground(new java.awt.Color(255, 255, 255));

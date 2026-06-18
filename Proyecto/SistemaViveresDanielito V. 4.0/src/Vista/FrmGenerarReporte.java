@@ -271,7 +271,7 @@ public class FrmGenerarReporte extends javax.swing.JFrame {
         jButton1GenerarreporteEspecifico.setBackground(new java.awt.Color(255, 255, 255));
         jButton1GenerarreporteEspecifico.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         jButton1GenerarreporteEspecifico.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1GenerarreporteEspecifico.setText("Generar Reporte Especifico ");
+        jButton1GenerarreporteEspecifico.setText("Generar Reporte de Stock");
         jButton1GenerarreporteEspecifico.setBorder(null);
         jButton1GenerarreporteEspecifico.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1GenerarreporteEspecifico.addMouseListener(new java.awt.event.MouseAdapter() {
