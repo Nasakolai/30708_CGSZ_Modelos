@@ -84,6 +84,70 @@ public class MovimientoDAO {
     }
 
     /**
+     * busca un movimiento puntual por su id de mongo. regresa null si el id
+     * no tiene formato valido o si no se encontro ningun movimiento con ese
+     * id (por ejemplo si alguien mas ya lo habia borrado).
+     */
+    public Movimiento buscarPorId(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            ObjectId objectId = new ObjectId(id.trim());
+            DBObject d = coleccion.findOne(new BasicDBObject("_id", objectId));
+            if (d == null) {
+                return null;
+            }
+            Movimiento m = new Movimiento();
+            m.setId(d.get("_id").toString());
+            m.setTipo((String) d.get("tipo"));
+            Object cant = d.get("cantidad");
+            if (cant instanceof Number) m.setCantidad(((Number) cant).intValue());
+            Object pu = d.get("precioUnitario");
+            if (pu instanceof Number) m.setPrecioUnitario(((Number) pu).doubleValue());
+            m.setFecha((String) d.get("fecha"));
+            Object tot = d.get("total");
+            if (tot instanceof Number) m.setTotal(((Number) tot).doubleValue());
+            m.setUsuario((String) d.get("usuario"));
+            m.setNombreProducto((String) d.get("nombreProducto"));
+            m.setCodigoProducto((String) d.get("codigoProducto"));
+            return m;
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+    }
+
+    /**
+     * actualiza un movimiento ya existente (se identifica por su id, el
+     * producto al que pertenece no cambia). esto es lo que permite corregir
+     * una cantidad mal tecleada sin tener que borrar y crear de nuevo el
+     * movimiento. regresa true si de verdad se actualizo algo.
+     */
+    public boolean actualizarMovimiento(Movimiento m) {
+        if (m == null || m.getId() == null || m.getId().trim().isEmpty()) {
+            return false;
+        }
+        try {
+            ObjectId objectId = new ObjectId(m.getId().trim());
+            BasicDBObject filtro = new BasicDBObject("_id", objectId);
+            BasicDBObject nuevosDatos = new BasicDBObject();
+            nuevosDatos.put("tipo", m.getTipo());
+            nuevosDatos.put("cantidad", m.getCantidad());
+            nuevosDatos.put("precioUnitario", m.getPrecioUnitario());
+            nuevosDatos.put("fecha", m.getFecha());
+            nuevosDatos.put("total", m.getTotal());
+            nuevosDatos.put("usuario", m.getUsuario());
+            nuevosDatos.put("nombreProducto", m.getNombreProducto());
+            nuevosDatos.put("codigoProducto", m.getCodigoProducto());
+            BasicDBObject actualizacion = new BasicDBObject("$set", nuevosDatos);
+            WriteResult resultado = coleccion.update(filtro, actualizacion);
+            return resultado.getN() > 0;
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
+    }
+
+    /**
      * borra el movimiento con el id indicado. regresa true si de verdad se
      * borro algo y false si no (id invalido, no existe, etc), asi la
      * pantalla puede avisarle al usuario en vez de asumir que siempre sale bien.

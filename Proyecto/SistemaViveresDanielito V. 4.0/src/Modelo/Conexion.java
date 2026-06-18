@@ -27,6 +27,7 @@ public class Conexion {
     DBCollection coleccionProd;
     DBCollection coleccionUser;
     DBCollection coleccionMov;
+    DBCollection coleccionProveedor;
 
     public Conexion() {
         // esto nos une a la base de datos de mongo
@@ -35,6 +36,12 @@ public class Conexion {
         coleccionProd = baseDatos.getCollection("Producto");
         coleccionUser = baseDatos.getCollection("Usuarios");
         coleccionMov = baseDatos.getCollection("Movimientos");
+        // catalogo de proveedores: antes el proveedor era solo un texto
+        // libre guardado dentro de cada producto, lo que permitia que el
+        // mismo proveedor quedara escrito de varias formas distintas
+        // (mayusculas, espacios, etc). ahora se guarda ademas en su propia
+        // coleccion para tener una lista unica y poder ofrecer autocompletado.
+        coleccionProveedor = baseDatos.getCollection("Proveedor");
     }
 
     /**

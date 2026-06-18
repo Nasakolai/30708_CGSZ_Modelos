@@ -22,6 +22,8 @@ public class FrmEditaPrduct extends javax.swing.JFrame {
     private ProductoDAO dao;
     private String originalNombre;
     private Runnable onSave;
+    private final Modelo.ProveedorDAO proveedorDao = new Modelo.ProveedorDAO();
+    private final java.util.ArrayList<String> proveedoresConocidos = new java.util.ArrayList<>();
 
     /**
      * Creates new form FrmEditaPrduct
@@ -48,6 +50,10 @@ public class FrmEditaPrduct extends javax.swing.JFrame {
         // en el resto de pantallas de la app.
         SetImageLabel(logo, "/imagenes/logoblanco.png");
         SetImageLabel(usuario, "/imagenes/usuarioblanco.png");
+        proveedoresConocidos.addAll(proveedorDao.obtenerNombresProveedores());
+        Vista.Autocompletado.instalar(jTextFieldProveedor, proveedoresConocidos);
+        FiltroNumerico.soloDecimales(jTextFieldPrecioUnitario);
+        FiltroNumerico.soloEnteros(jTextFieldStock);
         cargarProducto(producto);
         setLocationRelativeTo(null);
     }
@@ -93,7 +99,7 @@ public class FrmEditaPrduct extends javax.swing.JFrame {
         jLabel1Nombre = new javax.swing.JLabel();
         jComboBoxTipo = new javax.swing.JComboBox<>();
         jTextFieldPrecioUnitario = new javax.swing.JTextField();
-        jTextFieldProveedor = new javax.swing.JTextField();
+        jTextFieldProveedor = new javax.swing.JComboBox<>();
         jTextFieldStock = new javax.swing.JTextField();
         jLabelTipoStock = new javax.swing.JLabel();
         jLabelTipoProveedor = new javax.swing.JLabel();
@@ -174,8 +180,9 @@ public class FrmEditaPrduct extends javax.swing.JFrame {
         jTextFieldProveedor.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldProveedor.setFont(new java.awt.Font("Roboto", 0, 22)); // NOI18N
         jTextFieldProveedor.setForeground(new java.awt.Color(0, 0, 0));
-        jTextFieldProveedor.setText("jTextField1");
+        jTextFieldProveedor.setEditable(true);
         jTextFieldProveedor.setBorder(null);
+        jTextFieldProveedor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel2.add(jTextFieldProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 200, 410, 40));
 
         jTextFieldStock.setBackground(new java.awt.Color(255, 255, 255));
@@ -446,7 +453,10 @@ public class FrmEditaPrduct extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.WARNING, "no se pudo preseleccionar el tipo del producto", ex);
         }
         jTextFieldPrecioUnitario.setText(String.valueOf(producto.getPrecioUnit()));
-        jTextFieldProveedor.setText(producto.getProveedor());
+        Object editorProveedor = jTextFieldProveedor.getEditor().getEditorComponent();
+        if (editorProveedor instanceof javax.swing.JTextField) {
+            ((javax.swing.JTextField) editorProveedor).setText(producto.getProveedor());
+        }
         jTextFieldStock.setText(String.valueOf(producto.getStock()));
         if (jTextFieldCodigoProducto != null) {
             jTextFieldCodigoProducto.setText(producto.getCodigo() == null ? "" : producto.getCodigo());
@@ -467,7 +477,14 @@ public class FrmEditaPrduct extends javax.swing.JFrame {
         Object tipoSeleccionado = jComboBoxTipo.getSelectedItem();
         String tipo = tipoSeleccionado == null ? "" : tipoSeleccionado.toString();
         String precioText = jTextFieldPrecioUnitario.getText().trim().replace(',', '.');
-        String proveedor = jTextFieldProveedor.getText().trim();
+        String proveedor;
+        Object editorProveedorGuardar = jTextFieldProveedor.getEditor().getEditorComponent();
+        if (editorProveedorGuardar instanceof javax.swing.JTextField) {
+            proveedor = ((javax.swing.JTextField) editorProveedorGuardar).getText().trim();
+        } else {
+            Object seleccionado = jTextFieldProveedor.getSelectedItem();
+            proveedor = seleccionado == null ? "" : seleccionado.toString().trim();
+        }
         String stockText = jTextFieldStock.getText().trim();
         String codigo = jTextFieldCodigoProducto != null ? jTextFieldCodigoProducto.getText().trim() : "";
 
@@ -514,6 +531,7 @@ public class FrmEditaPrduct extends javax.swing.JFrame {
         try {
             Modelo.Producto actualizado = new Modelo.Producto(nombre, tipo, precio, proveedor, stock, codigo);
             dao.modificarProducto(originalNombre, actualizado);
+            proveedorDao.guardarSiNoExiste(proveedor);
             javax.swing.JOptionPane.showMessageDialog(this, "Producto actualizado correctamente.");
             if (onSave != null) {
                 onSave.run();
@@ -542,7 +560,7 @@ public class FrmEditaPrduct extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTextField jTextFieldCodigoProducto;
     private javax.swing.JTextField jTextFieldPrecioUnitario;
-    private javax.swing.JTextField jTextFieldProveedor;
+    private javax.swing.JComboBox<String> jTextFieldProveedor;
     private javax.swing.JTextField jTextFieldStock;
     private javax.swing.JLabel logo;
     private javax.swing.JLabel txtSalir;
