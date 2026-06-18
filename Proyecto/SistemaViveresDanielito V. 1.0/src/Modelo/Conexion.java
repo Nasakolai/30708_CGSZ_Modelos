@@ -11,7 +11,6 @@ public class Conexion {
     DBCollection coleccionProd;
     DBCollection coleccionProv;
     DBCollection coleccionUser;
-    DBCollection coleccionMov;
     
     public Conexion(){
         //ayuda a unirnos a la base de datos
@@ -19,8 +18,7 @@ public class Conexion {
         baseDatos= mongo.getDB("ViveresDanielito");
         coleccionProd=baseDatos.getCollection("Producto");
         coleccionProv=baseDatos.getCollection("Proveedor");
-        coleccionUser=baseDatos.getCollection("Usuarios");
-        coleccionMov = baseDatos.getCollection("Movimientos");
+        coleccionUser=baseDatos.getCollection("Usarios");
         
     }
 }

@@ -3,25 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Jahir/Downloads/SistemaViveresDanielito/SistemaViveresDanielito/src/Modelo/Producto.java</file>
-            <file>file:/C:/Users/Jahir/Downloads/SistemaViveresDanielito/SistemaViveresDanielito/src/Modelo/Movimiento.java</file>
-            <file>file:/C:/Users/Jahir/Downloads/SistemaViveresDanielito/SistemaViveresDanielito/src/Modelo/MovimientoDAO.java</file>
-            <file>file:/C:/Users/Jahir/Downloads/SistemaViveresDanielito/SistemaViveresDanielito/src/Modelo/Conexion.java</file>
-            <file>file:/C:/Users/Jahir/Downloads/SistemaViveresDanielito/SistemaViveresDanielito/src/Controlador/ControladorProducto.java</file>
-            <file>file:/C:/Users/Jahir/Downloads/SistemaViveresDanielito/SistemaViveresDanielito/src/Modelo/ProductoDAO.java</file>
-        </group>
-        <group name="FINAL2">
-            <file>file:/C:/Users/nicoz/Documents/NetBeansProjects/SistemaViveresDanielitoFINALFULL/SistemaViveresDanielito/src/mvcviveresdanielito/MVCViveresDanielito.java</file>
-        </group>
-        <group name="FINAL">
-            <file>file:/C:/Users/nicoz/Documents/NetBeansProjects/SistemaViveresDanielitoFINALFULL/SistemaViveresDanielito/src/Vista/FrmGestionInventarioo.java</file>
-            <file>file:/C:/Users/nicoz/Documents/NetBeansProjects/SistemaViveresDanielitoFINALFULL/SistemaViveresDanielito/src/Vista/FrmProducto.java</file>
-            <file>file:/C:/Users/nicoz/Documents/NetBeansProjects/SistemaViveresDanielitoFINALFULL/SistemaViveresDanielito/src/Vista/FrmGenerarReporte.java</file>
-            <file>file:/C:/Users/nicoz/Documents/NetBeansProjects/SistemaViveresDanielitoFINALFULL/SistemaViveresDanielito/src/Vista/FrmLogin.java</file>
-            <file>file:/C:/Users/nicoz/Documents/NetBeansProjects/SistemaViveresDanielitoFINALFULL/SistemaViveresDanielito/src/Controlador/ControladorLogin.java</file>
-            <file>file:/C:/Users/nicoz/Documents/NetBeansProjects/SistemaViveresDanielitoFINALFULL/SistemaViveresDanielito/src/Vista/FrmEditaPrduct.java</file>
-            <file>file:/C:/Users/nicoz/Documents/NetBeansProjects/SistemaViveresDanielitoFINALFULL/SistemaViveresDanielito/src/Vista/FrmGestionProductos.java</file>
-            <file>file:/C:/Users/nicoz/Documents/NetBeansProjects/SistemaViveresDanielitoFINALFULL/SistemaViveresDanielito/src/Vista/FrmSistema.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/SistemaViveresDanielito/src/Vista/FrmSistema.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/SistemaViveresDanielito/src/Vista/FrmLogin.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/SistemaViveresDanielito/src/Controlador/ControladorLogin.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/SistemaViveresDanielito/src/Controlador/ControladorProducto.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/SistemaViveresDanielito/src/Controlador/ControladorProveedor.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/SistemaViveresDanielito/src/Vista/FrmProducto.java</file>
+            <file>file:/C:/Users/Lenovo/Documents/NetBeansProjects/SistemaViveresDanielito/src/Modelo/ProductoDAO.java</file>
         </group>
     </open-files>
 </project-private>
