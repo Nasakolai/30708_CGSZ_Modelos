@@ -1,0 +1,10 @@
+Fecha        Producto                  Codigo          Movimiento      Cantidad   Precio/U   Total      Proveedor      
+-------------------------------------------------------------------------------------------------------------------------
+13/06/2026   Leche                                     Entrada         10         1.0        10.0       N/A            
+13/06/2026   Leche                                     Salida          3          1.0        3.0        N/A            
+13/06/2026   hpla                      wadwadwa        Entrada         4          12.0       48.0       N/A            
+13/06/2026   hpla                      wadwadwa        Salida          2          12.0       24.0       N/A            
+__/__/____   Leche                                     Entrada         10         1.0        10.0       N/A            
+13/06/2026   jahir                                     Entrada         4          10.99999   43.99996   N/A            
+13/06/2026   Nico                      LT001           Entrada         9          9.999999   89.99999100000001 hola           
+13/06/2026   Nico                      LT001           Salida          3          9.999999   29.999997  hola           
