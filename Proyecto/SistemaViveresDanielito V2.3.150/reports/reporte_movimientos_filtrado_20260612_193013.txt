@@ -1,0 +1,4 @@
+Fecha        Producto                  Codigo          Tipo            Cantidad   Precio/U   Total     
+-----------------------------------------------------------------------------------------------------
+12/06/2026   Hierva                    hola            Entrada         10         0.01       0.1       
+17/06/2026   Hierva                    hola            Entrada         200        0.01       2.0       
