@@ -1,0 +1,7 @@
+Fecha        Producto                  Codigo          Movimiento      Cantidad   Precio/U   Total      Proveedor      
+-------------------------------------------------------------------------------------------------------------------------
+12/06/2026   Hierva                    hola            Entrada         10         0.01       0.1        Hiervamas      
+17/06/2026   Hierva                    hola            Entrada         200        0.01       2.0        Hiervamas      
+12/06/2026   Claradehuevo                              Entrada         1000       0.35       350.0      huevitos123    
+16/06/2026   PapaChaucha               papa249         Entrada         30         0.03       0.8999999999999999 papamiz        
+12/06/2026   papapapapa                kakakakaka      Entrada         3          0.3        0.8999999999999999 jajakaka       
